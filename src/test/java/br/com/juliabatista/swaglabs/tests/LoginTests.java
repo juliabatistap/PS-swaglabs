@@ -1,5 +1,7 @@
-package br.com.juliabatista.swaglabs.login;
+package br.com.juliabatista.swaglabs.tests;
 
+import br.com.juliabatista.swaglabs.pages.HomePage;
+import br.com.juliabatista.swaglabs.pages.LoginPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,19 +15,20 @@ public class LoginTests {
     @Test
     @DisplayName("Login bem sucedido")
     public void testLoginBemSucedido(){
+        String usernameLogin = "standard_user";
+        String passwordLogin = "secret_sauce";
         // Abrir o chrome
         WebDriverManager.chromedriver().setup();
         WebDriver navegador = new ChromeDriver();
 
         // Abrir o site https://www.saucedemo.com/
-        navegador.get("https://www.saucedemo.com/");
-        //acessar ID user-name
-        navegador.findElement(By.id("user-name")).sendKeys("standard_user");
+        HomePage homePage = new HomePage(navegador);
+        homePage.acessarPagina();
 
-        //acessar id password
-        navegador.findElement(By.id("password")).sendKeys("secret_sauce");
-        //clicar em id login-button
-        navegador.findElement(By.id("login-button")).click();
+        //Realizar Login
+        LoginPage loginPage = new LoginPage(navegador);
+        loginPage.realizarLogin(usernameLogin, passwordLogin);
+
         //validar mensagem
         String paginaAtual = navegador.getCurrentUrl();
         Assertions.assertEquals("https://www.saucedemo.com/inventory.html", paginaAtual);
